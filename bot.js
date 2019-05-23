@@ -3,6 +3,7 @@ require('dotenv').config();
 var fs = require('fs');
 const https = require('https');
 console.log('Loaded... ');
+var groupid;
 
 /**
  * TO DO:
@@ -40,6 +41,7 @@ class Bot {
 
         const messageText = message.text;
         const messageName = message.name;
+        groupid = message.group_id;
 
         // EXPRESSION LIST
         const nameex = /Thumbnail-Maker/i
@@ -75,7 +77,7 @@ class Bot {
 
         var botId = "df420d9c0411f0ca5610322cd8";
 
-        if (mText.group_id.test(/41279538/)) {
+        if (/41279538/.test(groupid)) {
             botId = '601e4bbefc3526e61596f8bbf6';
         }
 
