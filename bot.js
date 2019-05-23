@@ -23,7 +23,6 @@ class Bot {
      */
     static checkMessage(message) {
         function count_words(raw) {
-            console.log(raw);
             var part1 = raw.replace(/(^\s*)|(\s*$)/gi,"");
             var part2 = part1.replace(/[ ]{2,}/gi," ");
             var part3 = part2.replace(/\n /,"\n");
