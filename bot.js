@@ -3,7 +3,7 @@ require('dotenv').config();
 var fs = require('fs');
 const https = require('https');
 console.log('Loaded... ');
-var groupid;
+var groupid, array;
 
 /**
  * TO DO:
@@ -26,15 +26,27 @@ class Bot {
             var part1 = raw.replace(/(^\s*)|(\s*$)/gi,"");
             var part2 = part1.replace(/[ ]{2,}/gi," ");
             var part3 = part2.replace(/\n /,"\n");
-            var part4 = part3.split(' ');
-            var count = part4.length;
+            var part4 = part3.replace(/(\n\r|\n|\r)/gm," ");
+            var part5 = part4.split(' ');
+            var count = part5.length;
+            array = [];
+            var url = 0;
             var i;
             for (i = 0; i <= count; i++) {
-                if (urlex.test(part4[i]) || url2ex.test(part4[i])) {
-                    return part4[i];
+                if (urlex.test(part5[i]) || url2ex.test(part5[i])) {
+                    array.push(part5[i]);
+                    url++;
                 }
-                else {
-                }
+            }
+            if (url > 1) {
+                return array;
+            }
+            if (url == 1) {
+                return stringify(array[0]);
+            }
+            else {
+                console.log('nothing found');
+                return null;
             }
         }
 
@@ -85,24 +97,30 @@ class Bot {
             path: '/v3/bots/post',
             method :'POST'
         };
-        const body = {
-            bot_id: botId,
-            text: mText
-        };
-        const botReq = https.request(options, function(response) {
-            if (response.statusCode !== 202) {
-                console.log('Bad status '+response.statusCode);
+        var loop;
+        for (loop = -0; loop <= array.length; loop++) {
+            var tick = function (loop) {
+                return function () {
+                    const body = {
+                        bot_id: botId,
+                        text: array[loop]
+                    };
+                    const botReq = https.request(options, function(response) {
+                        if (response.statusCode !== 202) {
+                            console.log('Bad status '+response.statusCode);
+                        }
+                    });
+                    botReq.on('error', function(err) {
+                        console.log('Error '+JSON.stringify(err));
+                    });
+                    botReq.on('timeout', function(err) {
+                        console.log('Timeout '+JSON.stringify(err));
+                    });
+                    botReq.end(JSON.stringify(body));
+                };
             }
-        });
-
-        botReq.on('error', function(err) {
-            console.log('Error '+JSON.stringify(err));
-        });
-
-        botReq.on('timeout', function(err) {
-            console.log('Timeout '+JSON.stringify(err));
-        });
-        botReq.end(JSON.stringify(body));
-    };
+            setTimeout(tick(loop), 500 * loop);
+        }
+    }
 };
 module.exports = Bot;
