@@ -3,11 +3,6 @@ require('dotenv').config();
 var fs = require('fs');
 const https = require('https');
 console.log('Loaded... ');
-console.log(process.env.BOT_ID);
-console.log(process.env.BOT_ID1);
-var date = new Date();
-var today = date.getDate();
-var day,groupid;
 
 /**
  * TO DO:
@@ -51,7 +46,6 @@ class Bot {
         const urlex = /https\:/i;
         const url2ex = /http\:/i;
         const spaceex = / /;
-        groupid = message.group_id;
 
         // BOT LOGIC - Checks if bot triggered bot, and if message has content, then splits every word into matrix before identifying URL
         if (messageText)
@@ -76,58 +70,38 @@ class Bot {
         }
         return null;
     };
-    /**
-     * Sends a message to GroupMe with a POST request.
-     *
-     * @static
-     * @param {string} messageText A message to send to chat
-     * @return {undefined}
-     */
-    static sendMessage(messageText) {
-        // Generally the groupme botid can just be saved in the ENV, but I found this extremely impractical and buggy with heroku, so I store it as const.
-        // var botId = process.env.BOT_ID;
-        const botId0 = "df420d9c0411f0ca5610322cd8";
-        const botId1 = "601e4bbefc3526e61596f8bbf6";
-        var botId;
-        const main = /27754904/;
-        const g2 = /41279538/;
-        console.log(groupid)
+
+    static sendMessage(mText) {
+
+        var botId = "df420d9c0411f0ca5610322cd8";
+
+        if (mText.group_id.test(/41279538/)) {
+            botId = '601e4bbefc3526e61596f8bbf6';
+        }
 
         const options = {
             hostname: 'api.groupme.com',
             path: '/v3/bots/post',
-            method: 'POST'
+            method :'POST'
         };
-        if (main.test(groupid)) {
-            botId = botId0;
-        }
-        if (g2.test(groupid)) {
-            botId = botId1;
-        }
         const body = {
             bot_id: botId,
-            text: messageText
+            text: mText
         };
-
-        // Make the POST request to GroupMe with the http module - Provided by ACM@UC - See README
-        const botRequest = https.request(options, function(response) {
+        const botReq = https.request(options, function(response) {
             if (response.statusCode !== 202) {
-                console.log('Rejecting bad status code ' + response.statusCode);
+                console.log('Bad status '+response.statusCode);
             }
         });
 
-        // On error
-        botRequest.on('error', function(error) {
-            console.log('Error posting message ' + JSON.stringify(error));
+        botReq.on('error', function(err) {
+            console.log('Error '+JSON.stringify(err));
         });
 
-        // On timeout
-        botRequest.on('timeout', function(error) {
-            console.log('Timeout posting message ' + JSON.stringify(error));
+        botReq.on('timeout', function(err) {
+            console.log('Timeout '+JSON.stringify(err));
         });
-
-        // Finally, send the body to GroupMe as a string
-        botRequest.end(JSON.stringify(body));
+        botReq.end(JSON.stringify(body));
     };
 };
 module.exports = Bot;
