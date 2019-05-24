@@ -45,7 +45,7 @@ class Bot {
                 return array;
             }
             if (url == 1) {
-                return stringify(array[0]);
+                return array[0];
             }
             else {
                 console.log('nothing found');
