@@ -39,6 +39,9 @@ class Bot {
                 }
             }
             if (url > 1) {
+                if (/E3 Kiosk/i.test(messageName)) {
+                    return null;
+                }
                 return array;
             }
             if (url == 1) {
