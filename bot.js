@@ -40,7 +40,9 @@ class Bot {
             }
             if (url > 1) {
                 if (/E3 Kiosk/i.test(messageName) || /e3test/i.test(messageName)) {
-                    return null;
+                    if (url > 2) {
+                        return null;
+                    }
                 }
                 return array;
             }
