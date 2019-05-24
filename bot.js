@@ -39,7 +39,7 @@ class Bot {
                 }
             }
             if (url > 1) {
-                if (/E3 Kiosk/i.test(messageName)) {
+                if (/E3 Kiosk/i.test(messageName) || /e3test/i.test(messageName)) {
                     return null;
                 }
                 return array;
