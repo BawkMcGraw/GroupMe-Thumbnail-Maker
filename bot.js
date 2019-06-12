@@ -100,6 +100,7 @@ class Bot {
         // Get botid from dev.groupme.com
         var botId = "";
 
+<<<<<<< HEAD
         // Get groupid's from dev.groupme.com - add as regex ( /id/; )
         var groupex;
 
@@ -107,6 +108,12 @@ class Bot {
             if (groupex.test(groupid)) {
                 botId = '';
             }
+=======
+        var botId = "";
+
+        if (/[groupid]/.test(groupid)) {
+            botId = '';
+>>>>>>> 0f238d719d59c292f6b72b12a6c262c35ac0832c
         }
         const options = {
             hostname: 'api.groupme.com',
