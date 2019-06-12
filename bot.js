@@ -41,6 +41,7 @@ class Bot {
             }
             if (url > 1) {
                 if (/E3 Kiosk/i.test(messageName) || /e3test/i.test(messageName)) {
+                    // change number of thumbnails you want posted for e3 info lists
                     if (url > 1) {
                         return null;
                     }
@@ -100,7 +101,6 @@ class Bot {
         // Get botid from dev.groupme.com
         var botId = "";
 
-<<<<<<< HEAD
         // Get groupid's from dev.groupme.com - add as regex ( /id/; )
         var groupex;
 
@@ -108,12 +108,6 @@ class Bot {
             if (groupex.test(groupid)) {
                 botId = '';
             }
-=======
-        var botId = "";
-
-        if (/[groupid]/.test(groupid)) {
-            botId = '';
->>>>>>> 0f238d719d59c292f6b72b12a6c262c35ac0832c
         }
         const options = {
             hostname: 'api.groupme.com',
