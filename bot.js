@@ -8,8 +8,9 @@ var groupid, array;
 /**
  * TO DO:
  * 
- * Add support for multiple URL's posted                        --IN PROGRESS--
- * Reject Groupme URL's to prevent "Event" thumbnail spamming   --IN PROGRESS--
+ * Add support for multiple URL's posted                        --COMPLETED--
+ * Reject Groupme URL's to prevent "Event" thumbnail spamming   --COMPLETED--
+ * Add proper support for E3 bot                                --COMPLETED--
  * 
  */
 
@@ -40,7 +41,7 @@ class Bot {
             }
             if (url > 1) {
                 if (/E3 Kiosk/i.test(messageName) || /e3test/i.test(messageName)) {
-                    if (url > 2) {
+                    if (url > 1) {
                         return null;
                     }
                 }
@@ -61,6 +62,7 @@ class Bot {
 
         // EXPRESSION LIST
         const nameex = /Thumbnail-Maker/i
+        const groupmeex = /groupme.com/i;
         const urlex = /https\:/i;
         const url2ex = /http\:/i;
         const spaceex = / /;
@@ -75,6 +77,10 @@ class Bot {
             else {
                 if (urlex.test(messageText) || url2ex.test(messageText)) {
                     if (spaceex.test(messageText)) {
+                        if (groupmeex.test(messageText)) {
+                            console.log('bot triggered by groupme url... ignoring.')
+                            return null;
+                        }
                         return count_words(messageText);
                     }
                     else {
@@ -89,10 +95,12 @@ class Bot {
         return null;
     };
 
+    // Packages the message information and sends to groupme api
     static sendMessage(mText) {
-
+        // Get botid from dev.groupme.com
         var botId = "df420d9c0411f0ca5610322cd8";
 
+        // Get groupid's from dev.groupme.com
         if (/41279538/.test(groupid)) {
             botId = '601e4bbefc3526e61596f8bbf6';
         }
@@ -102,6 +110,8 @@ class Bot {
             path: '/v3/bots/post',
             method :'POST'
         };
+
+        // Creates loop to send multiple messages if there are multiple links detected that need to be posted.
         var loop;
         for (loop = -0; loop <= array.length; loop++) {
             var tick = function (loop) {
