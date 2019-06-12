@@ -98,13 +98,16 @@ class Bot {
     // Packages the message information and sends to groupme api
     static sendMessage(mText) {
         // Get botid from dev.groupme.com
-        var botId = "df420d9c0411f0ca5610322cd8";
+        var botId = "";
 
-        // Get groupid's from dev.groupme.com
-        if (/41279538/.test(groupid)) {
-            botId = '601e4bbefc3526e61596f8bbf6';
+        // Get groupid's from dev.groupme.com - add as regex ( /id/; )
+        var groupex;
+
+        if (groupex) {
+            if (groupex.test(groupid)) {
+                botId = '';
+            }
         }
-
         const options = {
             hostname: 'api.groupme.com',
             path: '/v3/bots/post',
